@@ -1,12 +1,13 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Gamebar, GamebarProps } from "../components/Gamebar";
+import { Gamebar, GamebarProps } from "../components/profile/Gamebar";
 // Dummy data matching the GamebarProps interface
 
 const dummyData: GamebarProps = {
-  champIcon: "https://via.placeholder.com/80?text=Champion",
+  champIcon:
+    "https://i.pinimg.com/736x/0f/85/3e/0f853ec14887af0e28022e9cc7aa94c6.jpg",
   id: "match123",
   level: 20,
-  gameType: 1, // 1 = win, 0 = loss, -1 = remake (literal 1 is acceptable)
+  gameType: -1, // 1 = win, 0 = loss, -1 = remake (literal 1 is acceptable)
   stats: [12, 4, 9],
   creepScore: 200,
   visionScore: 35,
@@ -41,7 +42,8 @@ const dummyData: GamebarProps = {
         wards: 10,
       },
       jungle: {
-        champIcon: "https://via.placeholder.com/40?text=Blue+Jungle",
+        champIcon:
+          "https://i.pinimg.com/736x/0f/85/3e/0f853ec14887af0e28022e9cc7aa94c6.jpg",
         summonerName: "BlueJungle",
         stats: [8, 4, 10],
         items: ["https://via.placeholder.com/20?text=ItemB"],

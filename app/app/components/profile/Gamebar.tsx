@@ -73,16 +73,21 @@ const PlayerCard: FC<PlayerCardProps> = ({ player, role, teamColor }) => {
     </div>
   );
 };
+
+function truncate(text: string, maxLength: number): string {
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+}
+
 // The PlayerCard component renders individual player stats.
 const Players: FC<PlayerCardProps> = ({ player, role, teamColor }) => {
   return (
-    <div className={`player-card ${teamColor}`}>
+    <div className={`player-card ${teamColor} flex flex-row`}>
       <img
         src={player.champIcon}
         alt={`${role} champion`}
-        className="w-3 h-3"
+        className="w-5 h-5 mr-2"
       />
-      <p className="text-xs">{player.summonerName}</p>
+      <p className="text-xs">{truncate(player.summonerName, 8)}</p>
     </div>
   );
 };
@@ -142,7 +147,7 @@ export const Gamebar: FC<GamebarProps> = ({
   );
 
   const renderPlayers2 = (side: Side, teamColor: "red" | "blue") => (
-    <div className="flex flex-row">
+    <div>
       <Players player={side.top} role="top" teamColor={teamColor} />
       <Players player={side.jungle} role="jungle" teamColor={teamColor} />
       <Players player={side.mid} role="mid" teamColor={teamColor} />
@@ -158,19 +163,24 @@ export const Gamebar: FC<GamebarProps> = ({
         className={`w-[700px] h-[120px] ${bgColor} rounded-lg flex items-center p-4 cursor-pointer`}
         onClick={() => setExpanded(!expanded)}
       >
-        <div className="ml-4 text-white">
-          <h3 className="text-xl font-bold">{gameMode}</h3>
+        <div className="ml-2 text-white">
+          <h3 className="text-lg font-bold">{gameMode}</h3>
           <p className="text-xs">{timeAgo}</p>
           <br />
           <p className="text-md">
             <b>{gameResult}</b> {gameTime}
           </p>
         </div>
-        <img
-          src={champIcon}
-          alt="Champion Icon"
-          className="w-16 h-16 rounded-full m-[20px]"
-        />
+        <div className="relative w-16 h-16 mr-2">
+          <img
+            src={champIcon}
+            alt="Champion Icon"
+            className="w-19 h-19 rounded-full"
+          />
+          <div className="absolute bottom-0 right-0 bg-black text-white text-xs font-bold px-1 py-0.5 rounded">
+            {level}
+          </div>
+        </div>
         {/* Runes and Summoner Spells */}
         <div className="flex flex-col mr-4">
           {/* Runes Row */}
@@ -279,7 +289,7 @@ export const Gamebar: FC<GamebarProps> = ({
               {renderPlayers2(sides.blue, "blue")}
             </div>
             <div className="flex flex-col">
-              {renderPlayers2(sides.blue, "red")}
+              {renderPlayers2(sides.red, "red")}
             </div>
           </div>
         </div>
