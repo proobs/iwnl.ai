@@ -142,7 +142,7 @@ export const Gamebar: FC<GamebarProps> = ({
   );
 
   const renderPlayers2 = (side: Side, teamColor: "red" | "blue") => (
-    <div>
+    <div className="flex flex-row">
       <Players player={side.top} role="top" teamColor={teamColor} />
       <Players player={side.jungle} role="jungle" teamColor={teamColor} />
       <Players player={side.mid} role="mid" teamColor={teamColor} />
