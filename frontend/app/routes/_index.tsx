@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Gamebar, GamebarProps } from "../components/Gamebar"
+import { Gamebar, GamebarProps } from "../components/Gamebar";
 // Dummy data matching the GamebarProps interface
 
 const dummyData: GamebarProps = {
@@ -23,6 +23,9 @@ const dummyData: GamebarProps = {
     "https://via.placeholder.com/20?text=Item1",
     "https://via.placeholder.com/20?text=Item2",
     "https://via.placeholder.com/20?text=Item3",
+    "https://via.placeholder.com/20?text=Item4",
+    "https://via.placeholder.com/20?text=Item5",
+    "https://via.placeholder.com/20?text=Item6",
   ],
   ward_type: "Control Ward",
   kill_participation: 80,
@@ -124,7 +127,6 @@ const dummyData: GamebarProps = {
   },
 };
 
-
 export const meta: MetaFunction = () => {
   return [
     { title: "New Remix App" },
@@ -133,5 +135,10 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  return (<> <Gamebar {...dummyData} /> </> )
-  }
+  return (
+    <>
+      {" "}
+      <Gamebar {...dummyData} />{" "}
+    </>
+  );
+}

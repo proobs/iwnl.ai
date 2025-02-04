@@ -73,6 +73,19 @@ const PlayerCard: FC<PlayerCardProps> = ({ player, role, teamColor }) => {
     </div>
   );
 };
+// The PlayerCard component renders individual player stats.
+const Players: FC<PlayerCardProps> = ({ player, role, teamColor }) => {
+  return (
+    <div className={`player-card ${teamColor}`}>
+      <img
+        src={player.champIcon}
+        alt={`${role} champion`}
+        className="w-3 h-3"
+      />
+      <p className="text-xs">{player.summonerName}</p>
+    </div>
+  );
+};
 
 // The Gamebar component renders a summary of the match.
 export const Gamebar: FC<GamebarProps> = ({
@@ -91,7 +104,7 @@ export const Gamebar: FC<GamebarProps> = ({
   level,
   sides,
   kill_participation,
-  ward_type
+  ward_type,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const parseTimeToMinutes = (time: string): number => {
@@ -106,7 +119,8 @@ export const Gamebar: FC<GamebarProps> = ({
   const minutes = parseTimeToMinutes(gameTime);
   const csPerMin = minutes > 0 ? creepScore / minutes : 0;
   // Compute game result as a string based on the gameType
- const gameResult = gameType === -1 ? "REMAKE" : gameType === 0 ? "LOSS" : "WIN";
+  const gameResult =
+    gameType === -1 ? "REMAKE" : gameType === 0 ? "LOSS" : "WIN";
 
   // Set background color based on gameResult
   const bgColor =
@@ -127,6 +141,16 @@ export const Gamebar: FC<GamebarProps> = ({
     </div>
   );
 
+  const renderPlayers2 = (side: Side, teamColor: "red" | "blue") => (
+    <div>
+      <Players player={side.top} role="top" teamColor={teamColor} />
+      <Players player={side.jungle} role="jungle" teamColor={teamColor} />
+      <Players player={side.mid} role="mid" teamColor={teamColor} />
+      <Players player={side.bot} role="bot" teamColor={teamColor} />
+      <Players player={side.support} role="support" teamColor={teamColor} />
+    </div>
+  );
+
   return (
     <div className="flex flex-col items-center">
       {/* */}
@@ -134,102 +158,132 @@ export const Gamebar: FC<GamebarProps> = ({
         className={`w-[700px] h-[120px] ${bgColor} rounded-lg flex items-center p-4 cursor-pointer`}
         onClick={() => setExpanded(!expanded)}
       >
-
         <div className="ml-4 text-white">
           <h3 className="text-xl font-bold">{gameMode}</h3>
           <p className="text-xs">{timeAgo}</p>
           <br />
-          <p className="text-md"><b>{gameResult}</b> {gameTime}</p>
+          <p className="text-md">
+            <b>{gameResult}</b> {gameTime}
+          </p>
         </div>
         <img
           src={champIcon}
           alt="Champion Icon"
           className="w-16 h-16 rounded-full m-[20px]"
         />
-      {/* Runes and Summoner Spells */}
-      <div className="flex flex-col mr-4">
-        {/* Runes Row */}
-        <div className="flex space-x-1">
-          <div className="w-5 h-5 border border-white rounded overflow-hidden">
-            <img
-              src={runePrimary}
-              alt="Rune Primary"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="w-5 h-5 border border-white rounded overflow-hidden">
-            <img
-              src={runeSecondary}
-              alt="Rune Secondary"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-        {/* Summoner Spells Row */}
-        <div className="flex space-x-1 mt-1">
-          <div className="w-5 h-5 border border-white rounded overflow-hidden">
-            <img
-              src={summonerSpells[0]}
-              alt="Summoner Spell 1"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="w-5 h-5 border border-white rounded overflow-hidden">
-            <img
-              src={summonerSpells[1]}
-              alt="Summoner Spell 2"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-      </div>
-
-       {/* Text Information */}
-       <div className="ml-4 text-white">
-     
-        <p className="text-sm">
-          {/* KDA */}
-          <h3 className="text-xl font-bold">{stats[0]}/{stats[1]}/{stats[2]}</h3>
-          {/* Kill Participation */}
-          <p className="text-xs">P/Kill {kill_participation}%</p>
-
-          {/* CS and CS per Minute */}
-          <p className="text-xs">
-            CS {creepScore} ({csPerMin.toFixed(1)})
-          </p>
-
-          {/* Vision Score */}
-          <p className="text-xs">Vision: {visionScore}</p>
-        </p>
-       </div>
-        {/* Items and Ward Choice */}
-        <div className="flex flex-col items-center ml-4">
-        {/* Items Row */}
-        <div className="flex space-x-1">
-          {items.slice(0, 6).map((item, index) => (
-            <div
-              key={index}
-              className="w-5 h-5 border border-white rounded overflow-hidden"
-            >
+        {/* Runes and Summoner Spells */}
+        <div className="flex flex-col mr-4">
+          {/* Runes Row */}
+          <div className="flex space-x-1">
+            <div className="w-4 h-4 border border-white rounded overflow-hidden">
               <img
-                src={item}
-                alt={`Item ${index + 1}`}
+                src={runePrimary}
+                alt="Rune Primary"
                 className="w-full h-full object-cover"
               />
             </div>
-          ))}
-        </div>
-        {/* Ward Choice Box */}
-        <div className="mt-2">
-          <div className="w-5 h-5 border border-white rounded overflow-hidden">
-            <img
-              src={ward_type}
-              alt="Ward Choice"
-              className="w-full h-full object-cover"
-            />
+            <div className="w-4 h-4 border border-white rounded overflow-hidden">
+              <img
+                src={runeSecondary}
+                alt="Rune Secondary"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
-      </div>
+          {/* Summoner Spells Row */}
+          <div className="flex space-x-1 mt-1">
+            <div className="w-4 h-4 border border-white rounded overflow-hidden">
+              <img
+                src={summonerSpells[0]}
+                alt="Summoner Spell 1"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="w-4 h-4 border border-white rounded overflow-hidden">
+              <img
+                src={summonerSpells[1]}
+                alt="Summoner Spell 2"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
 
+        {/* Text Information */}
+        <div className="ml-4 text-white">
+          <p className="text-sm">
+            {/* KDA */}
+            <h3 className="text-xl font-bold">
+              {stats[0]}/{stats[1]}/{stats[2]}
+            </h3>
+            {/* Kill Participation */}
+            <p className="text-xs">P/Kill {kill_participation}%</p>
+
+            {/* CS and CS per Minute */}
+            <p className="text-xs">
+              CS {creepScore} ({csPerMin.toFixed(1)})
+            </p>
+
+            {/* Vision Score */}
+            <p className="text-xs">Vision {visionScore}</p>
+          </p>
+        </div>
+
+        {/* Items and Ward Choice */}
+        <div className="ml-4 grid grid-cols-[auto_auto] gap-x-2 items-center">
+          {/* Items and Ward */}
+          <div>
+            {/* Items 1-3 + Ward */}
+            <div className="flex space-x-1">
+              {items.slice(0, 3).map((item, index) => (
+                <div
+                  key={index}
+                  className="w-4 h-4 border border-white overflow-hidden"
+                >
+                  <img
+                    src={item}
+                    alt={`Item ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+              {/* Ward Choice */}
+              <div className="w-4 h-4 border border-white rounded overflow-hidden">
+                <img
+                  src={ward_type}
+                  alt="Ward Choice"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            {/* Items 4-6 */}
+            <div className="flex space-x-1 mt-1">
+              {items.slice(3, 6).map((item, index) => (
+                <div
+                  key={index + 3}
+                  className="w-4 h-4 border border-white rounded overflow-hidden"
+                >
+                  <img
+                    src={item}
+                    alt={`Item ${index + 4}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* blue team vs red team names */}
+          <div className="flex flex-row justify-center text-white space-x-1 ml-6">
+            <div className="flex flex-col ">
+              {renderPlayers2(sides.blue, "blue")}
+            </div>
+            <div className="flex flex-col">
+              {renderPlayers2(sides.blue, "red")}
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Expanded view for detailed player stats */}
       {expanded && (
         <div className="mt-4 w-full">
@@ -239,8 +293,6 @@ export const Gamebar: FC<GamebarProps> = ({
           {renderPlayers(sides.red, "red")}
         </div>
       )}
-    </div>
-    </div>
     </div>
   );
 };
