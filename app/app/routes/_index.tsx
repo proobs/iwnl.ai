@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Gamebar, GamebarProps } from "../components/profile/Gamebar";
+import { Gamebar } from "../components/profile/Gamebar";
+import { GamebarProps } from "~/components/profile/types";
 // Dummy data matching the GamebarProps interface
 
 const dummyData: GamebarProps = {
@@ -36,7 +37,14 @@ const dummyData: GamebarProps = {
         champIcon: "https://via.placeholder.com/40?text=Blue+Top",
         summonerName: "BlueTop",
         stats: [10, 3, 7],
-        items: ["https://via.placeholder.com/20?text=ItemA"],
+        items: [
+          "https://via.placeholder.com/20?text=ItemA",
+          "https://via.placeholder.com/20?text=ItemA",
+          "https://via.placeholder.com/20?text=ItemA",
+          "https://via.placeholder.com/20?text=ItemA",
+          "https://via.placeholder.com/20?text=ItemA",
+          "https://via.placeholder.com/20?text=ItemA",
+        ],
         kill_participation: 75,
         damage: 25000,
         wards: 10,
@@ -137,10 +145,5 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  return (
-    <>
-      {" "}
-      <Gamebar {...dummyData} />{" "}
-    </>
-  );
+  return <>{/* <Gamebar {...dummyData} />{" "} */}</>;
 }

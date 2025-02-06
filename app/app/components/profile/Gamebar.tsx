@@ -1,75 +1,38 @@
 import React, { FC, useState } from "react";
+import { PlayerCardProps, GamebarProps, Side } from "./types";
 
-// Type for individual player details
-interface Player {
-  champIcon: string; // URL or path to the champion's icon
-  summonerName: string; // Player's summoner name
-  stats: [number, number, number]; // [kills, deaths, assists]
-  items: string[]; // Array of item icons (URLs or paths)
-  kill_participation: number;
-  damage: number;
-  wards: number;
-}
-
-// Props for each PlayerCard
-interface PlayerCardProps {
-  player: Player;
-  role: string;
-  teamColor: "red" | "blue"; // Determines styling
-}
-
-// Type for a team side (blue or red)
-interface Side {
-  top: Player;
-  jungle: Player;
-  mid: Player;
-  bot: Player;
-  support: Player;
-}
-
-// remake = -1, loss = 0, win = 1
-type Gametype = 1 | 0 | -1;
-
-// Main match summary props
-export interface GamebarProps {
-  champIcon: string;
-  level: number;
-  id: string;
-  gameType: Gametype;
-  stats: [number, number, number]; // KDA
-  creepScore: number;
-  visionScore: number;
-  gameTime: string;
-  gameMode: string;
-  timeAgo: string;
-  runePrimary: string;
-  runeSecondary: string;
-  summonerSpells: [string, string];
-  items: string[];
-  ward_type: string;
-  kill_participation: number;
-  sides: {
-    blue: Side;
-    red: Side;
-  };
-}
-
-// The PlayerCard component renders individual player stats.
 const PlayerCard: FC<PlayerCardProps> = ({ player, role, teamColor }) => {
   return (
     <div className={`player-card ${teamColor}`}>
-      <img src={player.champIcon} alt={`${role} champion`} />
-      <h4>{role.toUpperCase()}</h4>
-      <p>{player.summonerName}</p>
-      <p>KDA: {player.stats.join("/")}</p>
-      <p>Kill Participation: {player.kill_participation}%</p>
-      {/* Render player items */}
-      <div className="items">
-        {player.items.map((item, idx) => (
-          <img key={idx} src={item} alt="Item" />
-        ))}
+      <div className="flex flex-row ml-2">
+        <img src={player.role_icon} className="w-3 h-3 mr-2" />
+        <img
+          src={player.champIcon}
+          alt={`${role} champion`}
+          className="w-4 h-4 mr-2"
+        />
+        <p>{player.summonerName}</p>
+        <p>KDA: {player.stats.join("/")}</p>
+        {/* Render damage */}
+
+        {/* Render player items */}
+        <div className="flex space-x-1">
+          {player.items.slice(0, 6).map((item, index) => (
+            <div key={index} className="w-4 h-4 border overflow-hidden ml-2">
+              <img
+                src={item}
+                alt={`Item ${index + 1}`}
+                className="w-4 h-4 object-cover"
+              />
+            </div>
+          ))}
+          <img
+            src={player.ward_type}
+            alt={`Ward`}
+            className="w-4 h-4 object-cover"
+          />
+        </div>
       </div>
-      {/* Add other stats as needed */}
     </div>
   );
 };
@@ -137,7 +100,7 @@ export const Gamebar: FC<GamebarProps> = ({
 
   // Helper function to render players for a given side
   const renderPlayers = (side: Side, teamColor: "red" | "blue") => (
-    <div className="flex space-x-2">
+    <div className="flex flex-col">
       <PlayerCard player={side.top} role="top" teamColor={teamColor} />
       <PlayerCard player={side.jungle} role="jungle" teamColor={teamColor} />
       <PlayerCard player={side.mid} role="mid" teamColor={teamColor} />
@@ -157,10 +120,9 @@ export const Gamebar: FC<GamebarProps> = ({
   );
 
   return (
-    <div className="flex flex-col items-center">
-      {/* */}
+    <div className="flex flex-col items-center w-[700px] mx-auto">
       <div
-        className={`w-[700px] h-[120px] ${bgColor} rounded-lg flex items-center p-4 cursor-pointer`}
+        className={`w-full h-[120px] ${bgColor} rounded-lg flex items-center p-4 cursor-pointer`}
         onClick={() => setExpanded(!expanded)}
       >
         <div className="ml-2 text-white">
@@ -283,7 +245,7 @@ export const Gamebar: FC<GamebarProps> = ({
             </div>
           </div>
 
-          {/* blue team vs red team names */}
+          {/* blue team vs red team names, in the future cut off the teamnames for mobile view */}
           <div className="flex flex-row justify-center text-white space-x-1 ml-6">
             <div className="flex flex-col ">
               {renderPlayers2(sides.blue, "blue")}
@@ -296,11 +258,15 @@ export const Gamebar: FC<GamebarProps> = ({
       </div>
       {/* Expanded view for detailed player stats */}
       {expanded && (
-        <div className="mt-4 w-full">
-          <h4 className="text-lg font-bold">Blue Team</h4>
-          {renderPlayers(sides.blue, "blue")}
-          <h4 className="text-lg font-bold mt-2">Red Team</h4>
-          {renderPlayers(sides.red, "red")}
+        <div className="w-full text-black">
+          <div className="bg-blue-200">
+            <h4 className="text-lg font-bold">Blue Team</h4>
+            {renderPlayers(sides.blue, "blue")}
+          </div>
+          <div className="bg-red-200">
+            <h4 className="text-lg font-bold mt-2">Red Team</h4>
+            {renderPlayers(sides.red, "red")}
+          </div>
         </div>
       )}
     </div>
