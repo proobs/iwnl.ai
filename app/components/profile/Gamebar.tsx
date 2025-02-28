@@ -126,14 +126,20 @@ export const Gamebar: FC<GamebarProps> = ({
   const minutes = parseTimeToMinutes(gameTime);
   const csPerMin = minutes > 0 ? creepScore / minutes : 0;
 
-  const gameResult =
-    gameType === -1 ? "REMAKE" : gameType === 0 ? "LOSS" : "WIN";
-  const bgColor =
-    gameResult === "WIN"
-      ? "bg-green-500"
-      : gameResult === "LOSS"
-      ? "bg-red-500"
-      : "bg-gray-500";
+  const getGameResult = (gameType: number): "REMAKE" | "LOSS" | "WIN" => {
+    if (gameType === -1) return "REMAKE";
+    if (gameType === 0) return "LOSS";
+    return "WIN";
+  };
+  
+  const bgColorMap: Record<"REMAKE" | "LOSS" | "WIN", string> = {
+    WIN: "bg-green-500",
+    LOSS: "bg-red-500",
+    REMAKE: "bg-gray-500",
+  };
+  
+  const gameResult = getGameResult(gameType);
+  const bgColor = bgColorMap[gameResult];
 
   const maxDamage = Math.max(
     ...Object.values(sides.blue).map((player) => player.damage.dealt),
@@ -331,7 +337,6 @@ export const Gamebar: FC<GamebarProps> = ({
                 </div>
               </div>
               <div className="mt-4">
-                <h5 className="text-md font-bold mb-2"></h5>
                 {renderPlayers(sides.red, "red", maxDamage)}
               </div>
             </div>
