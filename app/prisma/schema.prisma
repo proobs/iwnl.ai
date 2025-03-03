@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  uuid              String           @id @default(uuid())
+  name              String
+  level             Int
+  gameType          Int
+  stats             Stat[]
+  creepScore        Int
+  visionScore       Int
+  gameTime          String
+  gameMode          String
+  timeAgo           String
+  runePrimary       String
+  runeSecondary     String
+  summonerSpells    SummonerSpell[]
+  items             Item[]
+  wardType          String
+  killParticipation Int
+  damage            Damage           @relation(fields: [damageId], references: [id])
+  damageId          Int
+  sides             Sides            @relation(fields: [sidesId], references: [id])
+  sidesId           Int
+  gameStats         GameStats        @relation(fields: [gameStatsId], references: [id])
+  gameStatsId       Int
+  badges            Badge[]
+  opScore           Float
+  opRank            String
+}
+
+model Stat {
+  id        Int     @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [uuid])
+  profileId String
+  value     Int
+}
+
+model SummonerSpell {
+  id        Int     @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [uuid])
+  profileId String
+  url       String
+}
+
+model Item {
+  id        Int     @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [uuid])
+  profileId String
+  url       String
+}
+
+model Damage {
+  id        Int     @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [uuid])
+  profileId String
+  dealt     Int
+  taken     Int
+}
+
+model Sides {
+  id        Int     @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [uuid])
+  profileId String
+  blue      Side    @relation(fields: [blueId], references: [id])
+  blueId    Int
+  red       Side    @relation(fields: [redId], references: [id])
+  redId     Int
+}
+
+model Side {
+  id        Int     @id @default(autoincrement())
+  sides     Sides   @relation(fields: [sidesId], references: [id])
+  sidesId   Int
+  top       Role    @relation(fields: [topId], references: [id])
+  topId     Int
+  jungle    Role    @relation(fields: [jungleId], references: [id])
+  jungleId  Int
+  mid       Role    @relation(fields: [midId], references: [id])
+  midId     Int
+  bot       Role    @relation(fields: [botId], references: [id])
+  botId     Int
+  support   Role    @relation(fields: [supportId], references: [id])
+  supportId Int
+}
+
+model Role {
+  id                Int     @id @default(autoincrement())
+  side              Side    @relation(fields: [sideId], references: [id])
+  sideId            Int
+  champIcon         String
+  roleIcon          String
+  summonerName      String
+  stats             Stat[]
+  items             Item[]
+  wardType          String
+  killParticipation Int
+  damage            Damage  @relation(fields: [damageId], references: [id])
+  damageId          Int
+  wards             Ward    @relation(fields: [wardsId], references: [id])
+  wardsId           Int
+  creepScore        Int
+  level             Int
+  rankTier          String
+  opScore           Float
+  opRank            String
+}
+
+model Ward {
+  id        Int     @id @default(autoincrement())
+  role      Role    @relation(fields: [roleId], references: [id])
+  roleId    Int
+  placed    Int
+  destroyed Int
+}
+
+model GameStats {
+  id        Int     @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [uuid])
+  profileId String
+  blue      Team    @relation(fields: [blueId], references: [id])
+  blueId    Int
+  red       Team    @relation(fields: [redId], references: [id])
+  redId     Int
+}
+
+model Team {
+  id        Int        @id @default(autoincrement())
+  gameStats GameStats  @relation(fields: [gameStatsId], references: [id])
+  gameStatsId Int
+  totalKills Int
+  totalGold  Int
+  objectives Objective @relation(fields: [objectivesId], references: [id])
+  objectivesId Int
+}
+
+model Objective {
+  id         Int     @id @default(autoincrement())
+  team       Team    @relation(fields: [teamId], references: [id])
+  teamId     Int
+  dragons    Int
+  barons     Int
+  towers     Int
+  inhibitors Int
+}
+
+model Badge {
+  id        Int     @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [uuid])
+  profileId String
+  name      String
+}

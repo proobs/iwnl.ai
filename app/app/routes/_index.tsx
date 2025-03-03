@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "@remix-run/react";
 import { Navbar } from "components/navbar/Navbar";
-import { Search, ChevronDown, Hexagon, Brain, LineChart, Users } from "lucide-react";
+import { Search, ChevronDown, Brain, LineChart, Users } from "lucide-react";
 import { Footer } from "../components/ui/footer";
 
 // Define region IDs as a union type for better type safety
@@ -32,6 +33,8 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -82,8 +85,7 @@ export default function Index() {
     }
   }, []);
 
-  // Form submission handler that prints values to console
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
       if (inputRef.current) {
@@ -91,25 +93,18 @@ export default function Index() {
       }
       return;
     }
-  
-    const payload = {
-      searchQuery,
-      region: selectedRegion.id,
-    };
-  
-    try {
-      const response = await fetch("http://localhost:5000/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error:", error);
+
+    let targetPath = "";
+    //  assume it's in the format id#tag
+    if (searchQuery.includes("#")) {
+      const [id, tag] = searchQuery.split("#");
+      // use encodeURI to change special characters to be URL friendly
+      targetPath = `/profile/${encodeURIComponent(id.trim())}.${encodeURIComponent(tag.trim())}.${selectedRegion.id}`;
+    } else {
+      targetPath = `/profile/${encodeURIComponent(searchQuery.trim())}.${selectedRegion.id}`;
     }
+    // Navigate to the target route
+    navigate(targetPath);
   };
 
   return (
@@ -141,7 +136,7 @@ export default function Index() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={"Game Name + #" + getPlaceholder(selectedRegion)} 
-                className="flex-1 rounded-l-xl border-0 bg-white/95 h-14 text-base px-4"
+                className="flex-1 rounded-l-xl border-0 bg-white/80 h-14 text-base px-4"
                 aria-label="Search"
                 type="text"
                 ref={inputRef}
@@ -149,7 +144,7 @@ export default function Index() {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={toggleDropdown}
-                  className="h-14 bg-white/95 border-l border-gray-200 px-4 flex items-center"
+                  className="h-14 bg-white/80 border-l border-gray-200 px-4 flex items-center"
                   aria-haspopup="true"
                   aria-expanded={dropdownOpen}
                   type="button"
