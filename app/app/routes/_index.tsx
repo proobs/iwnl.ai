@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "@remix-run/react";
-import { Navbar } from "components/navbar/Navbar";
+import { Navbar } from "~/components/Navbar";
 import { Search, ChevronDown, Brain, LineChart, Users } from "lucide-react";
 import { Footer } from "../components/ui/footer";
 
@@ -99,9 +99,9 @@ export default function Index() {
     if (searchQuery.includes("#")) {
       const [id, tag] = searchQuery.split("#");
       // use encodeURI to change special characters to be URL friendly
-      targetPath = `/profile/${encodeURIComponent(id.trim())}.${encodeURIComponent(tag.trim())}.${selectedRegion.id}`;
+      targetPath = `/profile/${encodeURIComponent(id.trim())}/${encodeURIComponent(tag.trim())}/${selectedRegion.id}`;
     } else {
-      targetPath = `/profile/${encodeURIComponent(searchQuery.trim())}.${selectedRegion.id}`;
+      targetPath = `/profile/${encodeURIComponent(searchQuery.trim())}/${selectedRegion.id}`;
     }
     // Navigate to the target route
     navigate(targetPath);

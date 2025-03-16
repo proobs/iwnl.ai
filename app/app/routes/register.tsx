@@ -1,5 +1,5 @@
 import { SignUp } from '@clerk/remix'
-import { Navbar } from 'components/navbar/Navbar'
+import { Navbar } from '~/components/Navbar'
 import { Footer } from '~/components/ui/footer'
 
 export default function Page() {

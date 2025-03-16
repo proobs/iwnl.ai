@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-gradient-to-br from-blue-500 via-blue-300 to-purple-500 overflow-hidden">
+      <body className="bg-gradient-to-br from-blue-500 via-blue-300 to-purple-500">
         {children}
         <ScrollRestoration />
         <Scripts />

@@ -1,5 +1,5 @@
-import { Gamebar } from "components/profile/Gamebar";
-import type { GamebarProps } from "components/profile/types";
+import { Gamebar } from "~/components/Gamebar";
+import type { GamebarProps } from "~/components/types";
 
 const dummyData: GamebarProps = {
   champIcon: "https://ddragon.leagueoflegends.com/cdn/14.3.1/img/champion/Yasuo.png",
