@@ -65,7 +65,7 @@ const dummyData: GamebarProps = {
       },
       jungle: {
         champIcon: "https://ddragon.leagueoflegends.com/cdn/14.3.1/img/champion/LeeSin.png",
-        role_icon: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png",
+        role_icon: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/imaxges/position-selector/positions/icon-position-jungle.png",
         summonerName: "JungleDiff",
         stats: [10, 2, 15],
         items: [
