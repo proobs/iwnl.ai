@@ -2,8 +2,6 @@ import React, { FC, useState } from "react";
 import type { GamebarProps, Side, Player, GameStats } from "./types";
 import { DamageBar } from "./DamageBar";
 import { Award, Crown, Shield, Swords } from "lucide-react";
-import { data } from "@remix-run/react";
-
 export interface PlayerCardProps {
   player: Player;
   role: string;
